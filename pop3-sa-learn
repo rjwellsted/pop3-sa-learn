@@ -31,9 +31,13 @@ pop3user = 'username'
 # the password for the spam mailbox
 pop3pass = 'password'
 
+# debug
+debug = False
+
 #  ##### End of user modifyable section #####
 
 import sys
+import os
 import poplib
 import tempfile
 
@@ -43,12 +47,17 @@ def main(args):
     mbox.pass_(pop3pass)
     numMessages = len(mbox.list()[1])
     for i in range(numMessages):
+        fp = tempfile.NamedTemporaryFile()
+        if debug:
+            print(fp.name)
         for j in mbox.retr(i+1)[1]:
             # TODO: detect and process base64 messages
-            fp = tempfile.NamedTemporaryFile()
             fp.write(j)
-            print(fp.name)
-            fp.close
+        cmd = 'sa-learn --spam '
+        cmd += fp.name
+        if debug:
+            print(cmd)
+        #os.system(cmd)
     return 0
 
 #####################################
