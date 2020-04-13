@@ -17,14 +17,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #  
+#  ##### Modify the following lines to suit your environment #####
+pop3host = 'server.domain.tld'  # the FQDN of your pop3 server
+pop3port = 110                  # the port number (if not standard)
+pop3user = 'username'           # the username for the spam mailbox
+pop3pass = 'password'           # the password for the spam mailbox
+
+#  ##### End of user modifyable section #####
 
 import sys
-import getpass, poplib
-
-pop3host = 'server.domain.tld'
-pop3port = 110
-pop3user = 'username'
-pop3pass = 'password'
+import poplib
+import tempfile
 
 def main(args):
     mbox = poplib.POP3(pop3host, port=pop3port)    
@@ -33,7 +36,9 @@ def main(args):
     numMessages = len(mbox.list()[1])
     for i in range(numMessages):
         for j in mbox.retr(i+1)[1]:
-            print(j)
+            fp = tempfile.TemporaryFile(prefix='pop3sa', dir='/tmp')
+            fp.write(j)
+            fp.close
     return 0
 
 #####################################
