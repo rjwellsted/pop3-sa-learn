@@ -18,10 +18,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #  
 #  ##### Modify the following lines to suit your environment #####
-pop3host = 'server.domain.tld'  # the FQDN of your pop3 server
-pop3port = 110                  # the port number (if not standard)
-pop3user = 'username'           # the username for the spam mailbox
-pop3pass = 'password'           # the password for the spam mailbox
+
+# the FQDN of your pop3 server
+pop3host = 'server.domain.tld'
+
+# the port number (if not standard)
+pop3port = 110
+
+# the username for the spam mailbox
+pop3user = 'username'
+
+# the password for the spam mailbox
+pop3pass = 'password'
 
 #  ##### End of user modifyable section #####
 
@@ -36,8 +44,10 @@ def main(args):
     numMessages = len(mbox.list()[1])
     for i in range(numMessages):
         for j in mbox.retr(i+1)[1]:
-            fp = tempfile.TemporaryFile(prefix='pop3sa', dir='/tmp')
+            # TODO: detect and process base64 messages
+            fp = tempfile.NamedTemporaryFile()
             fp.write(j)
+            print(fp.name)
             fp.close
     return 0
 
