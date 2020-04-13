@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
+#  pop3-sa-learn
+#  
+#  Copyright 2020 Goldthorn Services Limited <info@goldthorn.co.uk>
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  
+
+import sys
+import getpass, poplib
+
+pop3host = 'server.domain.tld'
+pop3port = 110
+pop3user = 'username'
+pop3pass = 'password'
+
+def main(args):
+    mbox = poplib.POP3(pop3host, port=pop3port)    
+    mbox.user(pop3user)
+    mbox.pass_(pop3pass)
+    numMessages = len(mbox.list()[1])
+    for i in range(numMessages):
+        for j in mbox.retr(i+1)[1]:
+            print(j)
+    return 0
+
+#####################################
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
